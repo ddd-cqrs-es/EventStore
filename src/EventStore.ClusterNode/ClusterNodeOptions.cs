@@ -199,6 +199,9 @@ namespace EventStore.ClusterNode
         [ArgDescription(Opts.UnsafeIgnoreHardDeleteDescr, Opts.DbGroup)]
         public bool UnsafeIgnoreHardDelete { get; set; }
 
+        [ArgDescription(Opts.IndexVerificationDescr, Opts.DbGroup)]
+        public IndexVerificationType IndexVerification { get; set; }
+
         [ArgDescription(Opts.IndexCacheDepthDescr, Opts.DbGroup)]
         public int IndexCacheDepth { get; set; }
 
@@ -319,6 +322,7 @@ namespace EventStore.ClusterNode
             GossipAllowedDifferenceMs = Opts.GossipAllowedDifferenceMsDefault;
             GossipTimeoutMs = Opts.GossipTimeoutMsDefault;
             IndexCacheDepth = Opts.IndexCacheDepthDefault;
+            IndexVerification = Opts.IndexVerificationDefault;
             EnableHistograms = Opts.HistogramEnabledDefault;
             ReaderThreadsCount = Opts.ReaderThreadsCountDefault;
 

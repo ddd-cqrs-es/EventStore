@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using EventStore.Common.Options;
 using EventStore.Common.Utils;
 using EventStore.Core.Authentication;
 using EventStore.Core.Data;
@@ -64,6 +65,7 @@ namespace EventStore.Core.Cluster.Settings
         public readonly bool VerifyDbHash;
         public readonly int MaxMemtableEntryCount;
         public readonly int HashCollisionReadLimit;
+        public readonly IndexVerificationType IndexVerification;
         public readonly int IndexCacheDepth;
         public readonly byte IndexBitnessVersion;
 
@@ -126,6 +128,7 @@ namespace EventStore.Core.Cluster.Settings
                                     bool logHttpRequests,
                                     int connectionPendingSendBytesThreshold,
                                     string index = null, bool enableHistograms = false,
+                                    IndexVerificationType indexVerification = IndexVerificationType.MD5,
                                     int indexCacheDepth = 16,
                                     byte indexBitnessVersion = 2,
                                     IPersistentSubscriptionConsumerStrategyFactory[] additionalConsumerStrategies = null,
@@ -216,6 +219,7 @@ namespace EventStore.Core.Cluster.Settings
             HashCollisionReadLimit = hashCollisionReadLimit;
 
             EnableHistograms = enableHistograms;
+            IndexVerification = indexVerification;
             IndexCacheDepth = indexCacheDepth;
             IndexBitnessVersion = indexBitnessVersion;
             Index = index;

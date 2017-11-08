@@ -176,6 +176,7 @@ namespace EventStore.Core
                                             maxSizeForMemory: vNodeSettings.MaxMemtableEntryCount,
                                             maxTablesPerLevel: 2,
                                             inMem: db.Config.InMemDb,
+                                            indexVerification: vNodeSettings.IndexVerification,
                                             indexCacheDepth: vNodeSettings.IndexCacheDepth);
 			var readIndex = new ReadIndex(_mainQueue,
                                           readerPool,

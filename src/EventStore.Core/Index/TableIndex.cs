@@ -10,6 +10,7 @@ using EventStore.Core.Exceptions;
 using EventStore.Core.TransactionLog;
 using EventStore.Core.Util;
 using EventStore.Core.Index.Hashes;
+using EventStore.Common.Options;
 
 namespace EventStore.Core.Index
 {
@@ -28,6 +29,7 @@ namespace EventStore.Core.Index
         private readonly int _maxTablesPerLevel;
         private readonly bool _additionalReclaim;
         private readonly bool _inMem;
+        private readonly IndexVerificationType _indexVerification;
         private readonly int _indexCacheDepth;
         private readonly byte _ptableVersion;
         private readonly string _directory;
@@ -60,6 +62,7 @@ namespace EventStore.Core.Index
                           int maxTablesPerLevel = 4,
                           bool additionalReclaim = false,
                           bool inMem = false,
+                          IndexVerificationType indexVerification = IndexVerificationType.MD5,
                           int indexCacheDepth = 16)
         {
             Ensure.NotNullOrEmpty(directory, "directory");
@@ -79,6 +82,7 @@ namespace EventStore.Core.Index
             _maxTablesPerLevel = maxTablesPerLevel;
             _additionalReclaim = additionalReclaim;
             _inMem = inMem;
+            _indexVerification = indexVerification;
             _indexCacheDepth = indexCacheDepth;
             _ptableVersion = ptableVersion;
             _awaitingMemTables = new List<TableItem> { new TableItem(_memTableFactory(), -1, -1) };
@@ -112,7 +116,7 @@ namespace EventStore.Core.Index
             // this can happen (very unlikely, though) on master crash
             try
             {
-                _indexMap = IndexMap.FromFile(indexmapFile, maxTablesPerLevel: _maxTablesPerLevel, cacheDepth: _indexCacheDepth);
+                _indexMap = IndexMap.FromFile(indexmapFile, maxTablesPerLevel: _maxTablesPerLevel, cacheDepth: _indexCacheDepth, indexVerification: _indexVerification);
                 if (_indexMap.CommitCheckpoint >= chaserCheckpoint)
                 {
                     _indexMap.Dispose(TimeSpan.FromMilliseconds(5000));
@@ -125,7 +129,7 @@ namespace EventStore.Core.Index
                 LogIndexMapContent(indexmapFile);
                 DumpAndCopyIndex();
                 File.Delete(indexmapFile);
-                _indexMap = IndexMap.FromFile(indexmapFile, maxTablesPerLevel: _maxTablesPerLevel, cacheDepth: _indexCacheDepth);
+                _indexMap = IndexMap.FromFile(indexmapFile, maxTablesPerLevel: _maxTablesPerLevel, cacheDepth: _indexCacheDepth, indexVerification: _indexVerification);
             }
             _prepareCheckpoint = _indexMap.PrepareCheckpoint;
             _commitCheckpoint = _indexMap.CommitCheckpoint;
