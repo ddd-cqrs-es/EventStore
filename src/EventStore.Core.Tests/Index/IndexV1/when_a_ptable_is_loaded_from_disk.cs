@@ -56,7 +56,7 @@ namespace EventStore.Core.Tests.Index.IndexV1
         [Test]
         public void same_midpoints_are_loaded_when_enabling_or_disabling_index_verification()
         {
-            for(int depth = 2; depth < 10; depth++){
+            for(int depth = 2; depth <= 20; depth++){
                 var ptableWithMD5Verification = PTable.FromFile(_copiedfilename, depth, IndexVerificationType.MD5);
                 var ptableWithoutVerification = PTable.FromFile(_copiedfilename, depth, IndexVerificationType.Disabled);
                 var midPoints1 = ptableWithMD5Verification.GetMidPoints();
